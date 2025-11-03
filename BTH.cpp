@@ -2,27 +2,23 @@
 #include <stdlib.h>
 #include <string.h>
 
-// Ð?nh nghia h?ng s?
-#define MAX_SV 100 // T?i da 100 sinh viên
-#define MAX_LEN 50 // Ð? dài t?i da c?a chu?i
+#define MAX_SV 100
+#define MAX_LEN 50
 
-// 1. Ð?NH NGHIA C?U TRÚC
+
 struct SinhVien {
     char hoTen[MAX_LEN];
-    char ngaySinh[12]; // D?ng "dd/mm/yyyy"
+    char ngaySinh[12];
     char gioiTinh[10];
     double diemTB;
 };
 
-// 2. HÀM TI?N ÍCH
-// Hàm xóa ký t? \n ? cu?i chu?i mà fgets d?c vào
 void xoa_xuong_dong(char s[]) {
     s[strcspn(s, "\n")] = '\0';
 }
 
-// Hàm nh?p thông tin cho 1 sinh viên
 void nhapThongTin(struct SinhVien *sv) {
-    char buffer[10]; // Bi?n d?m d? d?c s?
+    char buffer[10];
 
     printf("Nhap ho ten: ");
     fgets(sv->hoTen, MAX_LEN, stdin);
@@ -38,17 +34,14 @@ void nhapThongTin(struct SinhVien *sv) {
 
     printf("Nhap diem trung binh: ");
     fgets(buffer, 10, stdin);
-    sscanf(buffer, "%lf", &sv->diemTB); // Chuy?n chu?i sang double
+    sscanf(buffer, "%lf", &sv->diemTB);
 }
 
-// Hàm in thông tin 1 sinh viên (in d?ng b?ng)
 void inSinhVien(struct SinhVien sv) {
-    // In theo d?nh d?ng "| Ten | Ngay Sinh | Gioi Tinh | Diem |"
     printf("| %-25s | %-15s | %-10s | %8.2f |\n", 
            sv.hoTen, sv.ngaySinh, sv.gioiTinh, sv.diemTB);
 }
 
-// 3. CÁC HÀM CH?C NANG (DÙNG PROTOTYPE)
 void themSinhVien(struct SinhVien ds[], int *soLuong);
 void hienThiDanhSach(struct SinhVien ds[], int soLuong);
 int timViTriTheoTen(struct SinhVien ds[], int soLuong, char ten[]);
@@ -57,15 +50,13 @@ void suaThongTin(struct SinhVien ds[], int soLuong);
 void timKiem(struct SinhVien ds[], int soLuong);
 void sapXep(struct SinhVien ds[], int soLuong);
 
-// Hàm so sánh cho qsort
 int compareByScore(const void *a, const void *b);
 int compareByName(const void *a, const void *b);
 
 
-// 4. HÀM MAIN (MENU ÐI?U KHI?N)
 int main() {
-    struct SinhVien danhSachSV[MAX_SV]; // M?ng c? d?nh
-    int soLuongHienTai = 0; // Bi?n d?m s? sinh viên
+    struct SinhVien danhSachSV[MAX_SV];
+    int soLuongHienTai = 0;
     int luaChon;
     char buffer[10];
 
@@ -82,11 +73,10 @@ int main() {
         printf("Nhap lua chon cua ban: ");
         
         fgets(buffer, 10, stdin);
-        sscanf(buffer, "%d", &luaChon); // Ð?c l?a ch?n
+        sscanf(buffer, "%d", &luaChon);
 
         switch (luaChon) {
             case 1:
-                // Truy?n con tr? (d?a ch?) c?a soLuongHienTai
                 themSinhVien(danhSachSV, &soLuongHienTai); 
                 break;
             case 2:
@@ -115,9 +105,8 @@ int main() {
     return 0;
 }
 
-// 5. Ð?NH NGHIA CÁC HÀM CH?C NANG
 
-// 1. Thêm sinh viên
+// 1. ThÃªm sinh viÃªn
 void themSinhVien(struct SinhVien ds[], int *soLuong) {
     if (*soLuong >= MAX_SV) {
         printf("Danh sach da day, khong the them!\n");
@@ -125,12 +114,12 @@ void themSinhVien(struct SinhVien ds[], int *soLuong) {
     }
 
     printf("--- Nhap thong tin sinh vien moi ---\n");
-    nhapThongTin(&ds[*soLuong]); // Nh?p vào v? trí cu?i cùng
-    (*soLuong)++; // Tang s? lu?ng
+    nhapThongTin(&ds[*soLuong]);
+    (*soLuong)++;
     printf("Da them sinh vien thanh cong!\n");
 }
 
-// 2. Hi?n th? danh sách
+// 2. Hiá»ƒn thá»‹ danh sÃ¡ch
 void hienThiDanhSach(struct SinhVien ds[], int soLuong) {
     if (soLuong == 0) {
         printf("Danh sach sinh vien trong.\n");
@@ -146,17 +135,17 @@ void hienThiDanhSach(struct SinhVien ds[], int soLuong) {
     printf("---------------------------------------------------------------------------\n");
 }
 
-// Hàm h? tr? tìm v? trí
+// HÃ m há»— trá»£ tÃ¬m vi trÃ­
 int timViTriTheoTen(struct SinhVien ds[], int soLuong, char ten[]) {
     for (int i = 0; i < soLuong; ++i) {
-        if (strcmp(ds[i].hoTen, ten) == 0) { // Dùng strcmp d? so sánh chu?i
-            return i; // Tr? v? ch? s? (index)
+        if (strcmp(ds[i].hoTen, ten) == 0) { 
+            return i;
         }
     }
-    return -1; // Không tìm th?y
+    return -1;
 }
 
-// 3. Xóa sinh viên
+// 3. XÃ³a sinh viÃªn
 void xoaSinhVien(struct SinhVien ds[], int *soLuong) {
     char tenCanXoa[MAX_LEN];
     printf("Nhap ten sinh vien can xoa: ");
@@ -165,18 +154,17 @@ void xoaSinhVien(struct SinhVien ds[], int *soLuong) {
 
     int viTri = timViTriTheoTen(ds, *soLuong, tenCanXoa);
     if (viTri != -1) {
-        // Dùng vòng l?p d? d?n các ph?n t? t? phía sau lên
         for (int i = viTri; i < *soLuong - 1; i++) {
             ds[i] = ds[i + 1];
         }
-        (*soLuong)--; // Gi?m s? lu?ng
+        (*soLuong)--;
         printf("Da xoa sinh vien.\n");
     } else {
         printf("Khong tim thay sinh vien voi ten: %s\n", tenCanXoa);
     }
 }
 
-// 4. S?a thông tin
+// 4. Sá»­a thÃ´ng tin
 void suaThongTin(struct SinhVien ds[], int soLuong) {
     char tenCanSua[MAX_LEN];
     printf("Nhap ten sinh vien can sua: ");
@@ -186,14 +174,14 @@ void suaThongTin(struct SinhVien ds[], int soLuong) {
     int viTri = timViTriTheoTen(ds, soLuong, tenCanSua);
     if (viTri != -1) {
         printf("--- Nhap thong tin moi cho sinh vien ---\n");
-        nhapThongTin(&ds[viTri]); // Nh?p dè lên thông tin cu
+        nhapThongTin(&ds[viTri]);
         printf("Da cap nhat thong tin.\n");
     } else {
         printf("Khong tim thay sinh vien voi ten: %s\n", tenCanSua);
     }
 }
 
-// 5. Tìm ki?m
+// 5. TÃ¬m kiáº¿m
 void timKiem(struct SinhVien ds[], int soLuong) {
     int luaChon;
     char buffer[10];
@@ -241,8 +229,7 @@ void timKiem(struct SinhVien ds[], int soLuong) {
     }
 }
 
-// 6. S?p x?p
-// Hàm so sánh cho qsort (theo di?m gi?m d?n)
+// 6. Sáº¯p xáº¿p
 int compareByScore(const void *a, const void *b) {
     struct SinhVien *svA = (struct SinhVien*)a;
     struct SinhVien *svB = (struct SinhVien*)b;
@@ -251,7 +238,6 @@ int compareByScore(const void *a, const void *b) {
     return 0;
 }
 
-// Hàm so sánh cho qsort (theo tên A-Z)
 int compareByName(const void *a, const void *b) {
     struct SinhVien *svA = (struct SinhVien*)a;
     struct SinhVien *svB = (struct SinhVien*)b;
@@ -274,5 +260,5 @@ void sapXep(struct SinhVien ds[], int soLuong) {
         qsort(ds, soLuong, sizeof(struct SinhVien), compareByName);
         printf("Da sap xep theo ten A-Z.\n");
     }
-    hienThiDanhSach(ds, soLuong); // Hi?n th? l?i danh sách
+    hienThiDanhSach(ds, soLuong);
 }
